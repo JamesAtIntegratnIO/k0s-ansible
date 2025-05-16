@@ -1,0 +1,32 @@
+all:
+  children:
+    initial_controller:
+      hosts:
+        k8s-storage-master:
+    controller:
+      hosts:
+        k8s-storage-worker1:
+        k8s-storage-worker2:
+    worker:
+      hosts:
+    storage_cluster:
+      hosts:
+        k8s-storage-master:
+        k8s-storage-worker1:
+        k8s-storage-worker2:
+  hosts:    
+    k8s-storage-master:
+      ansible_host: 10.0.5.101
+      static_ip_address: 10.0.5.101
+      minio_drive: /dev/nvme0n1
+      k0s_worker: true
+    k8s-storage-worker1:
+      ansible_host: 10.0.5.102
+      static_ip_address: 10.0.5.102
+      minio_drive: /dev/nvme0n1
+      k0s_worker: true
+    k8s-storage-worker2:
+      ansible_host: 10.0.5.103
+      static_ip_address: 10.0.5.103
+      minio_drive: /dev/nvme0n1
+      k0s_worker: true

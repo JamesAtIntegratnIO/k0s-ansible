@@ -1,0 +1,27 @@
+---
+- name: Set static IP with netplan
+  copy:
+    content: |
+      network:
+        version: 2
+        ethernets:
+          eth0:
+            dhcp4: no
+            link-local: [ ipv4 ]
+            addresses: [{{ static_ip_address }}/{{ network_cidr }}]
+            routes:
+              - to: default
+                via: {{ network_gateway }}
+            nameservers:
+              addresses: [{{ network_dns }}]
+    dest: /etc/netplan/01-static-ip.yaml
+    owner: root
+    mode: '0600'
+  notify:
+    - Apply netplan configuration
+- name: remove 50-cloud-init.yaml
+  file:
+    path: /etc/netplan/50-cloud-init.yaml
+    state: absent
+  notify: 
+    - Apply netplan configuration

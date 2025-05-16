@@ -1,0 +1,17 @@
+---
+- name: Update and upgrade packages
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Identify pis
+      set_fact:
+        is_pi: true
+      when:
+        - ansible_facts['architecture'] == "aarch64"
+        - ansible_facts['kernel'].find('raspi') != -1
+
+    - name: show whos a pi
+      debug:
+        msg: "This is a pi"
+      when: is_pi | default(false)

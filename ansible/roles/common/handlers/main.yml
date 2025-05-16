@@ -1,0 +1,18 @@
+- name: Apply netplan configuration
+  command: netplan apply
+- name: Restart SSH Service
+  service:
+    name: ssh
+    state: restarted
+- name: Restart resolvctl
+  service:
+    name: systemd-resolved
+    state: restarted
+- name: Reboot RPI for cmdline changes
+  ansible.builtin.reboot:
+    msg: "Rebooting to apply changes to /boot/cmdline.txt"
+    connect_timeout: 5
+    reboot_timeout: 600
+    pre_reboot_delay: 0
+    post_reboot_delay: 30
+    test_command: uptime

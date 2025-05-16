@@ -1,0 +1,83 @@
+- name: Update and upgrade apt packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+    cache_valid_time: 86400 # One day
+
+- name: Add public key to user SSH
+  authorized_key:
+    user: boboysdadda
+    key: "{{ lookup('file', '/home/boboysdadda/.ssh/id_ed25519.pub') }}"
+    state: present
+
+- name: Replace /etc/resolv.conf with a symlink to /run/systemd/resolve/resolv.conf
+  file:
+    src: /run/systemd/resolve/resolv.conf
+    dest: /etc/resolv.conf
+    state: link
+    force: true
+  notify:
+    - Restart resolvctl
+
+- name: Add NOPASSWD entry to sudoers file
+  lineinfile:
+    path: /etc/sudoers
+    line: 'boboysdadda ALL=(ALL) NOPASSWD:ALL'
+    validate: 'visudo -cf %s'  
+
+- name: Include netplan tasks
+  ansible.builtin.include_tasks: netplan.yml
+
+- name: increase inotify max_user_instances
+  ansible.builtin.sysctl:
+    name: fs.inotify.max_user_instances
+    value: 256
+    state: present
+    reload: yes
+
+- name: format "{{ minio_drive }}" to xfs
+  filesystem:
+    fstype: xfs
+    dev: "{{ minio_drive }}"
+    opts: "-L MINIODRIVE1"
+  when: minio_drive is defined and minio_drive != ""
+  
+- name: mount "{{ minio_drive }}" to /mnt/minio
+  mount:
+    path: /mnt/minio
+    src: LABEL=MINIODRIVE1
+    fstype: xfs
+    dump: 0
+    passno: 2
+    state: mounted
+    opts: defaults,noatime
+  when: minio_drive is defined and minio_drive != ""
+
+- set_fact: 
+    cmdline_txt_path: "/boot/firmware/cmdline.txt"
+- include_tasks: ./cmdline.yml
+  vars:
+    key: cgroup_enable
+    value: memory
+    update: false
+    # will add the argument if the key-value-pair doesn't exist
+
+- include_tasks: ./cmdline.yml
+  vars:
+    key: cgroup_enable
+    value: cpu
+    update: false
+
+- include_tasks: ./cmdline.yml
+  vars:
+    key: cgroup_memory
+    value: 1
+    update: true
+    # will replace the value of the first matching key, if found;
+    # will add it if it's not found
+
+- include_tasks: ./cmdline.yml
+  vars:
+    key: quiet
+    remove: true
+    # will remove all matching keys

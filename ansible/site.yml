@@ -1,0 +1,25 @@
+- hosts: initial_controller:controller:worker
+  name: prerequisites
+  become: true
+  roles:
+    - role: common
+      tags: common
+    - role: download
+      tags: download
+    - role: prereq
+      tags: prereq
+
+- hosts: initial_controller
+  roles:
+    - role: k0s/initial_controller
+      tags: init
+
+- hosts: controller
+  roles:
+    - role: k0s/controller
+      tags: server
+
+- hosts: worker
+  roles:
+    - role: k0s/worker
+      tags: worker
