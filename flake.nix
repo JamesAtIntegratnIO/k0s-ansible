@@ -23,7 +23,22 @@
           ansible
           k0sctl
           kubectl
+          opentofu
+          kubecm
+          helm
+          argocd
+          kustomize
         ];
+        shellHook = ''
+          set -a
+          source ./secrets.env
+          source <(kubectl completion bash)
+          source <(kubecm completion bash)
+          source <(helm completion bash)
+          source <(argocd completion bash)
+          source <(kustomize completion bash)
+          set +a
+      '';
       };
     });
 }

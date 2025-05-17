@@ -1,2 +1,6 @@
-ansible/artifacts/*
+**/*/k0s-kubeconfig.yml
+**/*/kubeconfig*
 ansible/distros/*
+*.env
+
+**/*/.terraform/
