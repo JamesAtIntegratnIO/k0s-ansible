@@ -38,6 +38,7 @@ locals {
     enable_nfs_subdir_external_provisioner = true
     enable_stakater_reloader               = true
     enable_kube_prometheus_stack           = true
+    enable_minio_operator                  = true
   }
 
 }
