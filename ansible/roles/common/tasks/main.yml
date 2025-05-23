@@ -4,6 +4,33 @@
     upgrade: dist
     cache_valid_time: 86400 # One day
 
+- name: Install required packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - cgroup-lite
+    - cgroup-tools 
+    - cgroupfs-mount
+  when: ansible_facts.architecture == "aarch64"
+
+- name: install nfs-common
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - nfs-common
+  when: install_nfs_common 
+
+- name: add modprobes
+  modprobe:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - overlay
+    - br_netfilter
+    - nf_conntrack
+
 - name: Add public key to user SSH
   authorized_key:
     user: boboysdadda

@@ -5,7 +5,6 @@ resource "kubernetes_namespace" "op_connect" {
     }
     name = "op-connect"
   }
-  depends_on = [time_sleep.wait_for_cluster]
 }
 
 resource "kubernetes_secret" "op_credentials" {

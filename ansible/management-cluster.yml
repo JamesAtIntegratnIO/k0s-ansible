@@ -1,3 +1,4 @@
+# ansible-playbook -i management-cluster.yml site.yml
 all:
   children:
     initial_controller:
@@ -20,13 +21,19 @@ all:
       static_ip_address: 10.0.5.101
       minio_drive: /dev/nvme0n1
       k0s_worker: true
+      k0s_use_custom_config: true
+      install_nfs_common: true
     k8s-storage-worker1:
       ansible_host: 10.0.5.102
       static_ip_address: 10.0.5.102
       minio_drive: /dev/nvme0n1
       k0s_worker: true
+      k0s_use_custom_config: true
+      install_nfs_common: true
     k8s-storage-worker2:
       ansible_host: 10.0.5.103
       static_ip_address: 10.0.5.103
       minio_drive: /dev/nvme0n1
       k0s_worker: true
+      k0s_use_custom_config: true
+      install_nfs_common: true

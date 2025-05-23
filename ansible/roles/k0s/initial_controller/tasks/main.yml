@@ -4,7 +4,7 @@
   register: install_initial_controller_cmd
   command: >
     k0s install controller
-    {% if k0s_worker %} --enable-worker
+    {% if k0s_worker %} --enable-worker --no-taints
     {% elif k0s_single_node %} --enable-worker --single
     {% endif %}
     {% if extra_args is defined %} {{ extra_args }} {% endif %}

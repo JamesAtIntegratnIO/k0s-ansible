@@ -42,15 +42,13 @@ locals {
 
 }
 
-# add --var skip_cluster_wait=true to skip the wait if the cluster is already up
-resource "time_sleep" "wait_for_cluster" {
-  count           = var.skip_cluster_wait ? 0 : 1
-  depends_on      = [module.cluster]
-  create_duration = "7m"
-}
 
 module "argocd" {
   source = "git@github.com:jamesAtIntegratnIO/terraform-helm-gitops-bridge?ref=homelab"
+  
+  argocd = {
+    chart_version = "8.0.3"
+  }
 
   cluster = {
     cluster_name = var.cluster_name
@@ -63,7 +61,6 @@ module "argocd" {
     addons = file("${path.module}/bootstrap/addons.yaml")
   }
 
-  depends_on = [time_sleep.wait_for_cluster]
 }
 
 

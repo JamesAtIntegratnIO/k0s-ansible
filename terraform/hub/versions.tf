@@ -17,14 +17,14 @@ terraform {
 }
 
 provider "kubernetes" {
-  config_path    = "./k0s-kubeconfig.yml"
-  config_context = join("@", ["admin", var.cluster_name])
+  config_path    = "../../ansible/artifacts/k0s-kubeconfig.yml"
+  config_context = "Default"
 }
 
 provider "helm" {
   kubernetes {
-    config_path    = "./k0s-kubeconfig.yml"
-    config_context = join("@", ["admin", var.cluster_name])
+    config_path    = "../../ansible/artifacts/k0s-kubeconfig.yml"
+    config_context = "Default"
   }
 }
 

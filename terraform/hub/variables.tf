@@ -57,43 +57,11 @@ variable "proxmox_storage" {
   default = "local-zfs"
 
 }
-#####################################
-#   _____ ___   _     _____ _____   #
-#  |_   _/ _ \ | |   |  _  /  ___|  #
-#    | |/ /_\ \| |   | | | \ `--.   #
-#    | ||  _  || |   | | | |`--. \  #
-#    | || | | || |___\ \_/ /\__/ /  #
-#    \_/\_| |_/\_____/\___/\____/   #
-#                                   #                                          
-#####################################
 
 variable "cluster_name" {
   type = string
 }
 
-variable "cluster_endpoint_ip" {
-  type = string
-}
-
-variable "nameservers" {
-  type    = list(string)
-  default = []
-}
-
-variable "install_disk" {
-  type    = string
-  default = "/dev/sda"
-}
-
-variable "extra_manifests" {
-  type    = list(string)
-  default = []
-}
-
-variable "allow_scheduling_on_controlplane" {
-  type    = bool
-  default = false
-}
 
 # ARGOCD
 

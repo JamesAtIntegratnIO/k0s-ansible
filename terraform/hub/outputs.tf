@@ -1,8 +1,3 @@
-output "kubeconfig" {
-  value     = module.cluster.kubeconfig
-  sensitive = true
-}
-
 output "access_argocd" {
   description = "ArgoCD Access"
   value       = <<EOF
